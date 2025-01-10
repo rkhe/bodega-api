@@ -28,14 +28,19 @@ Route::group([
     'prefix' => 'auth',
     'middleware' => ['auth:sanctum'],
 ], function ($router) {
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/register', [AuthController::class, 'register'])->middleware('can:users');
+});
+Route::group([
+    'prefix' => 'auth',
+    'middleware' => ['auth:sanctum'],
+], function ($router) {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/accessing', [AuthController::class, 'accessing']);
+    // Route::post('/accessing', [AuthController::class, 'accessing']);
 });
 
 Route::group([
     'prefix' => 'users',
-    'middleware' => ['auth:sanctum'],
+    'middleware' => ['auth:sanctum', 'can:users'],
 ], function ($router) {
     Route::get('/', [UserController::class, 'index']);
     Route::get('/{user}', [UserController::class, 'show']);
