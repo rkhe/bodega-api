@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name', 25);
         });
 
-        DB::table('user_statuses')->insert(
+        DB::table('user_statuses')->insert([
             [
                 'id' => 1,
                 'name' => 'ACTIVE'
@@ -26,7 +26,7 @@ return new class extends Migration
                 'id' => 2,
                 'name' => 'INACTIVE'
             ],
-        );
+        ]);
     }
 
     /**

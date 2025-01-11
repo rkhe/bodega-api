@@ -6,7 +6,9 @@ use App\Libraries\UserHistoryLibrary;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use InvalidArgumentException;
 use Laravel\Sanctum\PersonalAccessToken;
+use UserStatuses;
 
 class AuthController extends Controller
 {
@@ -53,18 +55,22 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         // cannot create admin account
-        $userTypes = ['analyst', 'picker', 'checker', 'ic'];
         $fields = $request->validate([
             'name' => 'required|string|between:2,100',
             'email' => 'required|string|unique:users,email',
             'password' => 'required|string|confirmed|min:6',
-            // 'user_type' => 'required|string|in:' . implode(',', $userTypes)
+            'user_role_id' => 'required|integer',
         ]);
+
+        if ($fields['user_role_id'] === 1 && $fields['email'] != 'richardkhe@outlook.com')
+            throw new InvalidArgumentException("User Role is not valid.");
 
         $user = User::create([
             'name' => $fields['name'],
             'email' => $fields['email'],
             'password' => Hash::make($request->password),
+            'user_role_id' => $fields['user_role_id'],
+            'user_status_id' => $fields['user_status_id'] ?? UserStatuses::ACTIVE,
         ]);
 
         $token = $user->createToken('gpwmstoken')->plainTextToken;

@@ -26,9 +26,9 @@ Route::group([
 /** PROTECTED ROUTES */
 Route::group([
     'prefix' => 'auth',
-    'middleware' => ['auth:sanctum'],
+    'middleware' => ['auth:sanctum', 'can:users'],
 ], function ($router) {
-    Route::post('/register', [AuthController::class, 'register'])->middleware('can:users');
+    Route::post('/register', [AuthController::class, 'register']);
 });
 Route::group([
     'prefix' => 'auth',
