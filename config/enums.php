@@ -11,6 +11,17 @@
 // enabled
 // disabled
 
+abstract class UserRoles extends Enum
+{
+  const SUPER = 1;
+  const ADMINISTRATOR = 2;
+  const ANALYST = 3;
+  const CONTROLLER = 4;
+  const CHECKER = 5;
+  const FORKLIFT = 6;
+  const PICKER = 7;
+}
+
 abstract class UserStatuses extends Enum
 {
   const ACTIVE = 1;

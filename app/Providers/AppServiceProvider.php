@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use UserRoles;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -75,33 +76,33 @@ class AppServiceProvider extends ServiceProvider
      */
     private function isAuthorized($user, $ability)
     {
-        if ($user->role === "super")
+        if ($user->user_role_id === UserRoles::SUPER)
             return true;
 
-        $role = $user->role;
+        $role = $user->user_role_id;
         switch ($ability) {
             case 'customers':
             case 'users':
             case 'warehouse':
-                return (in_array($role, ['admin']));
+                return (in_array($role, [UserRoles::ADMINISTRATOR]));
 
             case 'materials':
-                return (in_array($role, ['admin', 'analyst']));
+                return (in_array($role, [UserRoles::ADMINISTRATOR, UserRoles::ANALYST]));
 
             case 'receivings':
-                return (in_array($role, ['admin', 'analyst', 'ic', 'checker']));
+                return (in_array($role, [UserRoles::ADMINISTRATOR, UserRoles::ANALYST, UserRoles::CONTROLLER, UserRoles::CHECKER]));
 
             case 'put_away':
             case 'full_bin_to_bin':
             case 'partial_bin_to_bin':
             case 'picking_confirmation':
             case 'bins':
-                return (in_array($role, ['admin', 'analyst', 'ic', 'checker', 'forklift', 'picker'])); // all
+                return (in_array($role, [UserRoles::ADMINISTRATOR, UserRoles::ANALYST, UserRoles::CONTROLLER, UserRoles::CHECKER, UserRoles::FORKLIFT, UserRoles::PICKER])); // all
 
             case 'dispatches':
             case 'picklists':
             case 'picklist_auto_confirm':
-                return (in_array($role, ['admin', 'analyst', 'ic']));
+                return (in_array($role, [UserRoles::ADMINISTRATOR, UserRoles::ANALYST, UserRoles::CONTROLLER]));
 
 
             default:
