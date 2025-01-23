@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WarehouseController;
+use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,7 +28,7 @@ Route::group([
 /** PROTECTED ROUTES */
 Route::group([
     'prefix' => 'auth',
-    'middleware' => ['auth:sanctum', 'can:users'],
+    'middleware' => ['auth:sanctum', 'can:' . AuthorizedPages::USERS],
 ], function ($router) {
     Route::post('/register', [AuthController::class, 'register']);
 });
@@ -40,11 +42,23 @@ Route::group([
 
 Route::group([
     'prefix' => 'users',
-    'middleware' => ['auth:sanctum', 'can:users'],
+    'middleware' => ['auth:sanctum', 'can:' . AuthorizedPages::USERS],
 ], function ($router) {
     Route::get('/', [UserController::class, 'index']);
     Route::get('/{user}', [UserController::class, 'show']);
     Route::post('/', [UserController::class, 'store']);
     Route::put('/{user}', [UserController::class, 'update']);
     Route::delete('/{user}', [UserController::class, 'destroy']);
+});
+
+
+Route::group([
+    'prefix' => 'warehouses',
+    'middleware' => ['auth:sanctum', 'can:' . AuthorizedPages::WAREHOUSES],
+], function ($router) {
+    Route::get('/', [WarehouseController::class, 'index']);
+    Route::get('/{warehouse}', [WarehouseController::class, 'show']);
+    Route::post('/', [WarehouseController::class, 'store']);
+    Route::put('/{warehouse}', [WarehouseController::class, 'update']);
+    Route::delete('/{warehouse}', [WarehouseController::class, 'destroy']);
 });

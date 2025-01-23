@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\User;
+use AuthorizedPages;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use UserRoles;
@@ -16,44 +17,50 @@ class AppServiceProvider extends ServiceProvider
     {
         #region gates
 
-        Gate::define('customers', function (User $user) {
-            return $this->isAuthorized($user, 'customers');
+        // General
+        Gate::define(AuthorizedPages::USERS, function (User $user) {
+            return $this->isAuthorized($user, AuthorizedPages::USERS);
         });
-        Gate::define('materials', function (User $user) {
-            return $this->isAuthorized($user, 'materials');
+        Gate::define(AuthorizedPages::CUSTOMERS, function (User $user) {
+            return $this->isAuthorized($user, AuthorizedPages::CUSTOMERS);
         });
-        Gate::define('users', function (User $user) {
-            return $this->isAuthorized($user, 'users');
+        Gate::define(AuthorizedPages::WAREHOUSES, function (User $user) {
+            return $this->isAuthorized($user, AuthorizedPages::WAREHOUSES);
         });
-        Gate::define('receivings', function (User $user) {
-            return $this->isAuthorized($user, 'receivings');
+
+        // Materials and configurations
+        Gate::define(AuthorizedPages::MATERIALS, function (User $user) {
+            return $this->isAuthorized($user, AuthorizedPages::MATERIALS);
         });
-        Gate::define('put_away', function (User $user) {
-            return $this->isAuthorized($user, 'put_away');
+
+        // Inbound
+        Gate::define(AuthorizedPages::RECEIVINGS, function (User $user) {
+            return $this->isAuthorized($user, AuthorizedPages::RECEIVINGS);
         });
-        Gate::define('full_bin_to_bin', function (User $user) {
-            return $this->isAuthorized($user, 'full_bin_to_bin');
+        Gate::define(AuthorizedPages::PUT_AWAYS, function (User $user) {
+            return $this->isAuthorized($user, AuthorizedPages::PUT_AWAYS);
         });
-        Gate::define('partial_bin_to_bin', function (User $user) {
-            return $this->isAuthorized($user, 'partial_bin_to_bin');
+        Gate::define(AuthorizedPages::FULL_BIN_TO_BIN, function (User $user) {
+            return $this->isAuthorized($user, AuthorizedPages::FULL_BIN_TO_BIN);
         });
-        Gate::define('picking_confirmation', function (User $user) {
-            return $this->isAuthorized($user, 'picking_confirmation');
+        Gate::define(AuthorizedPages::PARTIAL_BIN_TO_BIN, function (User $user) {
+            return $this->isAuthorized($user, AuthorizedPages::PARTIAL_BIN_TO_BIN);
         });
-        Gate::define('bins', function (User $user) {
-            return $this->isAuthorized($user, 'bins');
+
+        // Outbound
+        Gate::define(AuthorizedPages::DISPATCHES, function (User $user) {
+            return $this->isAuthorized($user, AuthorizedPages::DISPATCHES);
         });
-        Gate::define('dispatches', function (User $user) {
-            return $this->isAuthorized($user, 'dispatches');
+        Gate::define(AuthorizedPages::PICKLISTS, function (User $user) {
+            return $this->isAuthorized($user, AuthorizedPages::PICKLISTS);
         });
-        Gate::define('picklists', function (User $user) {
-            return $this->isAuthorized($user, 'picklists');
+        Gate::define(AuthorizedPages::PICKLIST_CONFIRMATIONS, function (User $user) {
+            return $this->isAuthorized($user, AuthorizedPages::PICKLIST_CONFIRMATIONS);
         });
-        Gate::define('picklist_auto_confirm', function (User $user) {
-            return $this->isAuthorized($user, 'picklist_auto_confirm');
-        });
-        Gate::define('users', function (User $user) {
-            return $this->isAuthorized($user, 'users');
+
+        // Storages
+        Gate::define(AuthorizedPages::STORAGES, function (User $user) {
+            return $this->isAuthorized($user, AuthorizedPages::STORAGES);
         });
 
         #endregion
@@ -82,8 +89,8 @@ class AppServiceProvider extends ServiceProvider
         $role = $user->user_role_id;
         switch ($ability) {
             case 'customers':
-            case 'users':
-            case 'warehouse':
+            case AuthorizedPages::USERS:
+            case 'warehouses':
                 return (in_array($role, [UserRoles::ADMINISTRATOR]));
 
             case 'materials':

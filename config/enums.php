@@ -11,6 +11,30 @@
 // enabled
 // disabled
 
+abstract class AuthorizedPages extends Enum
+{
+  const USERS = 'users';
+  const WAREHOUSES = 'warehouses';
+  const CUSTOMERS = 'customers';
+
+  // Materials and configurations (conversions, storage_types, etc)
+  const MATERIALS = 'materials';
+
+  // Inbound
+  const RECEIVINGS = 'receivings';
+  const PUT_AWAYS = 'put_aways';
+  const FULL_BIN_TO_BIN = 'full_bin_to_bin';
+  const PARTIAL_BIN_TO_BIN = 'partial_bin_to_bin';
+
+  // Outbound
+  const DISPATCHES = 'dispatches';
+  const PICKLISTS = 'picklists';
+  const PICKLIST_CONFIRMATIONS = 'picklist_confirmations';
+
+  // Storages
+  const STORAGES = 'storages';
+}
+
 abstract class UserRoles extends Enum
 {
   const SUPER = 1;

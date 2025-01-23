@@ -12,7 +12,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return response()->json(User::with('UserStatus')->paginate(25));
+        return response()->json(User::with('UserStatus')->paginate());
     }
 
     /**
@@ -46,6 +46,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
     }
 }
